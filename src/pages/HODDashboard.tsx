@@ -609,8 +609,6 @@ export default function HODDashboard({ timetable, setTimetable }: Props) {
     }
   }
 
-  const isInIIC = activePage === 'iic-guidelines' || activePage === 'iic-news' || activePage === 'iic-internships' || activePage === 'iic-resume'
-
   return (
     <div className="hod-dashboard">
       <header className="dashboard-header">

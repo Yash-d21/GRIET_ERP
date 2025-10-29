@@ -103,7 +103,7 @@ export default function TeacherDashboard({ timetable }: Props) {
   })
 
   // Resources state
-  const [resources, setResources] = useState<Resource[]>([
+  const [resources] = useState<Resource[]>([
     {
       id: '1',
       title: 'Database Concepts Lecture Notes',
@@ -115,7 +115,7 @@ export default function TeacherDashboard({ timetable }: Props) {
   ])
 
   // Answer Keys state
-  const [answerKeys, setAnswerKeys] = useState<AnswerKey[]>([
+  const [answerKeys] = useState<AnswerKey[]>([
     {
       id: '1',
       title: 'Mid-Term Exam Answer Key',
