@@ -18,9 +18,9 @@ type Props = {
 
 export default function StudentDashboard({ timetable }: Props) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
-  const [activePage, setActivePage] = useState<'dashboard' | 'profile' | 'courses' | 'attendance' | 'assignments' | 'resources' | 'feedback' | 'notices' | 'iic-guidelines' | 'iic-news' | 'iic-internships' | 'iic-resume' | 'helpdesk-dayscholar' | 'helpdesk-hostler' | 'settings' | 'exams-schedule' | 'exams-answer-keys' | 'exams-grades-and-marks'>('dashboard')
+  const [activePage, setActivePage] = useState<'dashboard' | 'profile' | 'courses' | 'attendance' | 'assignments' | 'resources' | 'feedback' | 'notices' | 'griet-guidelines' | 'griet-news' | 'griet-internships' | 'griet-resume' | 'helpdesk-dayscholar' | 'helpdesk-hostler' | 'settings' | 'exams-schedule' | 'exams-answer-keys' | 'exams-grades-and-marks'>('dashboard')
   const [isAcademicsOpen, setIsAcademicsOpen] = useState(false)
-  const [isIICOpen, setIsIICOpen] = useState(false)
+  const [isGRIETOpen, setIsGRIETOpen] = useState(false)
   const [isExamsOpen, setIsExamsOpen] = useState(false)
   const [isHelpDeskOpen, setIsHelpDeskOpen] = useState(false)
   const [activeDay, setActiveDay] = useState<keyof Omit<TimetableSlot, 'time'>>('monday')
@@ -81,7 +81,7 @@ export default function StudentDashboard({ timetable }: Props) {
   ]
   const isInAcademics = activePage === 'courses' || activePage === 'attendance' || activePage === 'assignments' || activePage === 'resources' || activePage === 'feedback'
   const isInExams = activePage === 'exams-schedule' || activePage === 'exams-answer-keys' || activePage === 'exams-grades-and-marks'
-  const isInIIC = activePage === 'iic-guidelines' || activePage === 'iic-news' || activePage === 'iic-internships' || activePage === 'iic-resume'
+  const isInGRIET = activePage === 'griet-guidelines' || activePage === 'griet-news' || activePage === 'griet-internships' || activePage === 'griet-resume'
   const isInHelpDesk = activePage === 'helpdesk-dayscholar' || activePage === 'helpdesk-hostler'
   
   // Semester-wise subjects data
@@ -272,6 +272,18 @@ export default function StudentDashboard({ timetable }: Props) {
     }
   }
 
+  const handleLogout = () => {
+    try {
+      const preservedTimetable = localStorage.getItem('timetable')
+      localStorage.clear()
+      if (preservedTimetable) {
+        localStorage.setItem('timetable', preservedTimetable)
+      }
+      sessionStorage.clear()
+    } catch {}
+    window.location.href = '/'
+  }
+
   // ATC Checker handler (mock implementation)
   const handleCheckAtc = async () => {
     if (!atcHandle.trim() || isLoadingAtc) return
@@ -362,16 +374,16 @@ export default function StudentDashboard({ timetable }: Props) {
     { subject: 'Open Elective I', code: 'OE-I', internal: 29, external: 47, total: 76, grade: 'A+', credits: 3 },
   ]
 
-  // IIC data
-  const iicGuidelines = [
-    { title: 'Project Submission Guidelines', description: 'All IIC projects must follow the standard format. Include project proposal, technical documentation, and presentation slides.', date: '2025-01-15' },
-    { title: 'IPR Filing Process', description: 'Steps to file for Intellectual Property Rights for your innovations. Contact IIC office for assistance.', date: '2025-01-10' },
+  // GRIET data
+  const grietGuidelines = [
+    { title: 'Project Submission Guidelines', description: 'All GRIET projects must follow the standard format. Include project proposal, technical documentation, and presentation slides.', date: '2025-01-15' },
+    { title: 'IPR Filing Process', description: 'Steps to file for Intellectual Property Rights for your innovations. Contact GRIET office for assistance.', date: '2025-01-10' },
     { title: 'Startup Recognition', description: 'Criteria and process for getting your startup recognized by the institution. Minimum 3 months of operation required.', date: '2025-01-05' },
     { title: 'Innovation Competition Rules', description: 'Guidelines for participating in institutional innovation competitions. Registration deadline: Feb 15, 2025.', date: '2024-12-20' },
   ]
 
-  const iicNews = [
-    { title: 'IIC Ideathon 2025', description: 'Join us for the biggest ideathon event on 3rd February. Cash prizes worth ₹50,000!', date: '2025-02-03', category: 'Event' },
+  const grietNews = [
+    { title: 'GRIET Ideathon 2025', description: 'Join us for the biggest ideathon event on 3rd February. Cash prizes worth ₹50,000!', date: '2025-02-03', category: 'Event' },
     { title: 'Guest Talk: Startup Funding Basics', description: 'Learn from industry experts about raising funds for your startup. Venue: Auditorium, 12th Feb, 3 PM.', date: '2025-02-12', category: 'Workshop' },
     { title: 'Innovation Grant Recipients', description: 'Congratulations to 5 student teams who received innovation grants this quarter!', date: '2025-01-28', category: 'Achievement' },
     { title: 'Patent Filing Success', description: '3 GRIET student innovations have been filed for patents this semester.', date: '2025-01-22', category: 'Achievement' },
@@ -394,10 +406,10 @@ export default function StudentDashboard({ timetable }: Props) {
     }
   }, [activePage])
 
-  // Auto-expand IIC section when on a subtab
+  // Auto-expand GRIET section when on a subtab
   useEffect(() => {
-    if (activePage === 'iic-guidelines' || activePage === 'iic-news' || activePage === 'iic-internships' || activePage === 'iic-resume') {
-      setIsIICOpen(true)
+    if (activePage === 'griet-guidelines' || activePage === 'griet-news' || activePage === 'griet-internships' || activePage === 'griet-resume') {
+      setIsGRIETOpen(true)
     }
   }, [activePage])
 
@@ -480,24 +492,24 @@ export default function StudentDashboard({ timetable }: Props) {
       'announcement': 'notices',
       'announcements': 'notices',
       
-      // IIC section
-      'iic': 'iic-guidelines',
-      'guidelines': 'iic-guidelines',
-      'guideline': 'iic-guidelines',
-      'rules': 'iic-guidelines',
-      'policy': 'iic-guidelines',
-      'news': 'iic-news',
-      'events': 'iic-news',
-      'event': 'iic-news',
-      'internship': 'iic-internships',
-      'internships': 'iic-internships',
-      'placement': 'iic-internships',
-      'placements': 'iic-internships',
-      'job': 'iic-internships',
-      'jobs': 'iic-internships',
-      'resume': 'iic-resume',
-      'cv': 'iic-resume',
-      'resume upload': 'iic-resume',
+      // GRIET section
+      'griet': 'griet-guidelines',
+      'guidelines': 'griet-guidelines',
+      'guideline': 'griet-guidelines',
+      'rules': 'griet-guidelines',
+      'policy': 'griet-guidelines',
+      'news': 'griet-news',
+      'events': 'griet-news',
+      'event': 'griet-news',
+      'internship': 'griet-internships',
+      'internships': 'griet-internships',
+      'placement': 'griet-internships',
+      'placements': 'griet-internships',
+      'job': 'griet-internships',
+      'jobs': 'griet-internships',
+      'resume': 'griet-resume',
+      'cv': 'griet-resume',
+      'resume upload': 'griet-resume',
       
       // Help Desk
       'help': 'helpdesk-dayscholar',
@@ -711,43 +723,43 @@ export default function StudentDashboard({ timetable }: Props) {
               Notices
             </button>
 
-            <div className={`nav-section ${isIICOpen ? 'open' : ''}`}>
+            <div className={`nav-section ${isGRIETOpen ? 'open' : ''}`}>
               <button
-                className={`nav-link nav-section-header ${isIICOpen ? 'open' : ''}`}
-                onClick={() => setIsIICOpen(!isIICOpen)}
+                className={`nav-link nav-section-header ${isGRIETOpen ? 'open' : ''}`}
+                onClick={() => setIsGRIETOpen(!isGRIETOpen)}
                 type="button"
               >
-                <span>IIC</span>
-                {isInIIC && (
-                <span className="nav-section-icon">{isIICOpen ? '▼' : '▶'}</span>
+                <span>GRIET</span>
+                {isInGRIET && (
+                <span className="nav-section-icon">{isGRIETOpen ? '▼' : '▶'}</span>
                 )}
               </button>
-              {isIICOpen && (
+              {isGRIETOpen && (
                 <div className="nav-section-sublinks">
                   <button
-                    className={`nav-link nav-sublink ${activePage === 'iic-guidelines' ? 'active' : ''}`}
-                    onClick={() => setActivePage('iic-guidelines')}
+                    className={`nav-link nav-sublink ${activePage === 'griet-guidelines' ? 'active' : ''}`}
+                    onClick={() => setActivePage('griet-guidelines')}
                     type="button"
                   >
                     Guidelines
                   </button>
                   <button
-                    className={`nav-link nav-sublink ${activePage === 'iic-news' ? 'active' : ''}`}
-                    onClick={() => setActivePage('iic-news')}
+                    className={`nav-link nav-sublink ${activePage === 'griet-news' ? 'active' : ''}`}
+                    onClick={() => setActivePage('griet-news')}
                     type="button"
                   >
                     News & Events
                   </button>
                   <button
-                    className={`nav-link nav-sublink ${activePage === 'iic-internships' ? 'active' : ''}`}
-                    onClick={() => setActivePage('iic-internships')}
+                    className={`nav-link nav-sublink ${activePage === 'griet-internships' ? 'active' : ''}`}
+                    onClick={() => setActivePage('griet-internships')}
                     type="button"
                   >
                     Internship & Placements
                   </button>
                   <button
-                    className={`nav-link nav-sublink ${activePage === 'iic-resume' ? 'active' : ''}`}
-                    onClick={() => setActivePage('iic-resume')}
+                    className={`nav-link nav-sublink ${activePage === 'griet-resume' ? 'active' : ''}`}
+                    onClick={() => setActivePage('griet-resume')}
                     type="button"
                   >
                     Resume
@@ -807,6 +819,13 @@ export default function StudentDashboard({ timetable }: Props) {
               type="button"
             >
               Settings
+            </button>
+            <button
+              className="nav-link logout"
+              onClick={handleLogout}
+              type="button"
+            >
+              🚪 Logout
             </button>
           </nav>
         </aside>
@@ -1386,11 +1405,11 @@ export default function StudentDashboard({ timetable }: Props) {
         </section>
           )}
 
-          {activePage === 'iic-guidelines' && (
-        <section className="iic-section">
-          <h3>IIC Guidelines</h3>
+          {activePage === 'griet-guidelines' && (
+        <section className="iic-section griet-section">
+          <h3>GRIET Guidelines</h3>
           <div className="guidelines-grid">
-            {iicGuidelines.map((guideline, idx) => (
+            {grietGuidelines.map((guideline, idx) => (
               <div key={idx} className="guideline-card">
                 <h4>{guideline.title}</h4>
                 <p>{guideline.description}</p>
@@ -1401,11 +1420,11 @@ export default function StudentDashboard({ timetable }: Props) {
         </section>
           )}
 
-          {activePage === 'iic-news' && (
-        <section className="iic-section">
-          <h3>IIC News & Events</h3>
+          {activePage === 'griet-news' && (
+        <section className="iic-section griet-section">
+          <h3>GRIET News & Events</h3>
           <div className="news-grid">
-            {iicNews.map((news, idx) => (
+            {grietNews.map((news, idx) => (
               <div key={idx} className="news-card">
                 <div className="news-header">
                   <span className="news-category">{news.category}</span>
@@ -1419,8 +1438,8 @@ export default function StudentDashboard({ timetable }: Props) {
         </section>
           )}
 
-          {activePage === 'iic-internships' && (
-        <section className="iic-section">
+          {activePage === 'griet-internships' && (
+        <section className="iic-section griet-section">
           <h3>Internship & Placements</h3>
           <div className="internships-grid">
             {internships.map((internship, idx) => (
@@ -1440,8 +1459,8 @@ export default function StudentDashboard({ timetable }: Props) {
         </section>
           )}
 
-          {activePage === 'iic-resume' && (
-        <section className="iic-section">
+          {activePage === 'griet-resume' && (
+        <section className="iic-section griet-section">
           <h3>Resume & Profile</h3>
           <div className="resume-container">
             <div className="resume-upload-card">

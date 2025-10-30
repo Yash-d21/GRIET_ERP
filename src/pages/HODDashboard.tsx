@@ -17,7 +17,7 @@ type Props = {
   setTimetable: (timetable: TimetableSlot[]) => void
 }
 
-type ActivePage = 'timetable' | 'attendance' | 'feedback' | 'exam-schedule' | 'iic-guidelines' | 'iic-news' | 'iic-internships' | 'iic-resume'
+type ActivePage = 'timetable' | 'attendance' | 'feedback' | 'exam-schedule' | 'griet-guidelines' | 'griet-news' | 'griet-internships' | 'griet-resume'
 
 type StudentAttendance = {
   rollNo: string
@@ -59,7 +59,7 @@ const subjects = ['CN', 'DBMS', 'WT', 'DS', 'OS', 'EM', 'PC', 'Java']
 export default function HODDashboard({ timetable, setTimetable }: Props) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [activePage, setActivePage] = useState<ActivePage>('timetable')
-  const [isIICOpen, setIsIICOpen] = useState(false)
+  const [isGRIETOpen, setIsGRIETOpen] = useState(false)
   const [activeDay, setActiveDay] = useState<keyof Omit<TimetableSlot, 'time'>>('monday')
   const [draggedCell, setDraggedCell] = useState<{ rowIndex: number; day: keyof Omit<TimetableSlot, 'time'> } | null>(null)
   const [showSaved, setShowSaved] = useState(false)
@@ -132,16 +132,16 @@ export default function HODDashboard({ timetable, setTimetable }: Props) {
     { course: 'Open Elective I', code: 'OE-I', date: '2025-02-22', time: '09:00 AM - 12:00 PM', venue: 'Hall A, Block 2', type: 'Mid-term' },
   ]
 
-  // IIC Data
-  const iicGuidelines = [
-    { title: 'Project Submission Guidelines', description: 'All IIC projects must follow the standard format. Include project proposal, technical documentation, and presentation slides.', date: '2025-01-15' },
-    { title: 'IPR Filing Process', description: 'Steps to file for Intellectual Property Rights for your innovations. Contact IIC office for assistance.', date: '2025-01-10' },
+  // GRIET Data
+  const grietGuidelines = [
+    { title: 'Project Submission Guidelines', description: 'All GRIET projects must follow the standard format. Include project proposal, technical documentation, and presentation slides.', date: '2025-01-15' },
+    { title: 'IPR Filing Process', description: 'Steps to file for Intellectual Property Rights for your innovations. Contact GRIET office for assistance.', date: '2025-01-10' },
     { title: 'Startup Recognition', description: 'Criteria and process for getting your startup recognized by the institution. Minimum 3 months of operation required.', date: '2025-01-05' },
     { title: 'Innovation Competition Rules', description: 'Guidelines for participating in institutional innovation competitions. Registration deadline: Feb 15, 2025.', date: '2024-12-20' },
   ]
 
-  const iicNews = [
-    { title: 'IIC Ideathon 2025', description: 'Join us for the biggest ideathon event on 3rd February. Cash prizes worth ₹50,000!', date: '2025-02-03', category: 'Event' },
+  const grietNews = [
+    { title: 'GRIET Ideathon 2025', description: 'Join us for the biggest ideathon event on 3rd February. Cash prizes worth ₹50,000!', date: '2025-02-03', category: 'Event' },
     { title: 'Guest Talk: Startup Funding Basics', description: 'Learn from industry experts about raising funds for your startup. Venue: Auditorium, 12th Feb, 3 PM.', date: '2025-02-12', category: 'Workshop' },
     { title: 'Innovation Grant Recipients', description: 'Congratulations to 5 student teams who received innovation grants this quarter!', date: '2025-01-28', category: 'Achievement' },
     { title: 'Patent Filing Success', description: '3 GRIET student innovations have been filed for patents this semester.', date: '2025-01-22', category: 'Achievement' },
@@ -221,6 +221,18 @@ export default function HODDashboard({ timetable, setTimetable }: Props) {
     : attendanceData
 
   const filteredAttendanceBySemester = filteredAttendance.filter(a => a.semester === selectedSemester)
+
+  const handleLogout = () => {
+    try {
+      const preservedTimetable = localStorage.getItem('timetable')
+      localStorage.clear()
+      if (preservedTimetable) {
+        localStorage.setItem('timetable', preservedTimetable)
+      }
+      sessionStorage.clear()
+    } catch {}
+    window.location.href = '/'
+  }
 
   const renderContent = () => {
     switch (activePage) {
@@ -511,13 +523,13 @@ export default function HODDashboard({ timetable, setTimetable }: Props) {
           </section>
         )
 
-      case 'iic-guidelines':
+      case 'griet-guidelines':
         return (
-          <section className="iic-guidelines-section">
-            <h3>IIC Guidelines</h3>
+          <section className="griet-guidelines-section">
+            <h3>GRIET Guidelines</h3>
             <div className="guidelines-wrapper">
               <div className="guidelines-grid">
-                {iicGuidelines.map((guideline, index) => (
+                {grietGuidelines.map((guideline, index) => (
                   <div key={index} className="guideline-card">
                     <h4>{guideline.title}</h4>
                     <p>{guideline.description}</p>
@@ -529,13 +541,13 @@ export default function HODDashboard({ timetable, setTimetable }: Props) {
           </section>
         )
 
-      case 'iic-news':
+      case 'griet-news':
         return (
-          <section className="iic-news-section">
-            <h3>IIC News & Updates</h3>
+          <section className="griet-news-section">
+            <h3>GRIET News & Updates</h3>
             <div className="news-wrapper">
               <div className="news-grid">
-                {iicNews.map((news, index) => (
+                {grietNews.map((news, index) => (
                   <div key={index} className="news-card">
                     <div className="news-header">
                       <span className="news-category">{news.category}</span>
@@ -550,9 +562,9 @@ export default function HODDashboard({ timetable, setTimetable }: Props) {
           </section>
         )
 
-      case 'iic-internships':
+      case 'griet-internships':
         return (
-          <section className="iic-internships-section">
+          <section className="griet-internships-section">
             <h3>Internships & Placements</h3>
             <div className="internships-wrapper">
               <div className="internships-grid">
@@ -574,9 +586,9 @@ export default function HODDashboard({ timetable, setTimetable }: Props) {
           </section>
         )
 
-      case 'iic-resume':
+      case 'griet-resume':
         return (
-          <section className="iic-resume-section">
+          <section className="griet-resume-section">
             <h3>Resume Management</h3>
             <div className="resume-wrapper">
               <div className="resume-info-card">
@@ -666,41 +678,41 @@ export default function HODDashboard({ timetable, setTimetable }: Props) {
             </button>
             <div className="nav-section">
               <button
-                className={`nav-section-header ${isIICOpen ? 'open' : ''}`}
-                onClick={() => setIsIICOpen(!isIICOpen)}
+                className={`nav-section-header ${isGRIETOpen ? 'open' : ''}`}
+                onClick={() => setIsGRIETOpen(!isGRIETOpen)}
                 type="button"
               >
-                <span>🏛️ IIC Work</span>
-                <span className={`nav-section-icon ${isIICOpen ? 'open' : ''}`}>
-                  {isIICOpen ? '▼' : '▶'}
+                <span>🏛️ GRIET Work</span>
+                <span className={`nav-section-icon ${isGRIETOpen ? 'open' : ''}`}>
+                  {isGRIETOpen ? '▼' : '▶'}
                 </span>
               </button>
-              {isIICOpen && (
+              {isGRIETOpen && (
                 <div className="nav-section-sublinks">
                   <button
-                    className={`nav-sublink ${activePage === 'iic-guidelines' ? 'active' : ''}`}
-                    onClick={() => setActivePage('iic-guidelines')}
+                    className={`nav-sublink ${activePage === 'griet-guidelines' ? 'active' : ''}`}
+                    onClick={() => setActivePage('griet-guidelines')}
                     type="button"
                   >
                     📋 Guidelines
                   </button>
                   <button
-                    className={`nav-sublink ${activePage === 'iic-news' ? 'active' : ''}`}
-                    onClick={() => setActivePage('iic-news')}
+                    className={`nav-sublink ${activePage === 'griet-news' ? 'active' : ''}`}
+                    onClick={() => setActivePage('griet-news')}
                     type="button"
                   >
                     📰 News & Updates
                   </button>
                   <button
-                    className={`nav-sublink ${activePage === 'iic-internships' ? 'active' : ''}`}
-                    onClick={() => setActivePage('iic-internships')}
+                    className={`nav-sublink ${activePage === 'griet-internships' ? 'active' : ''}`}
+                    onClick={() => setActivePage('griet-internships')}
                     type="button"
                   >
                     💼 Internships & Placements
                   </button>
                   <button
-                    className={`nav-sublink ${activePage === 'iic-resume' ? 'active' : ''}`}
-                    onClick={() => setActivePage('iic-resume')}
+                    className={`nav-sublink ${activePage === 'griet-resume' ? 'active' : ''}`}
+                    onClick={() => setActivePage('griet-resume')}
                     type="button"
                   >
                     📄 Resume Management
@@ -708,6 +720,13 @@ export default function HODDashboard({ timetable, setTimetable }: Props) {
                 </div>
               )}
             </div>
+            <button
+              className={`nav-link logout`}
+              onClick={handleLogout}
+              type="button"
+            >
+              🚪 Logout
+            </button>
           </nav>
         </aside>
 

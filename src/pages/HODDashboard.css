@@ -528,10 +528,10 @@
 .attendance-section h3,
 .feedback-section h3,
 .exam-schedule-section h3,
-.iic-guidelines-section h3,
-.iic-news-section h3,
-.iic-internships-section h3,
-.iic-resume-section h3 {
+.griet-guidelines-section h3,
+.griet-news-section h3,
+.griet-internships-section h3,
+.griet-resume-section h3 {
   margin: 0 0 24px 0;
   font-size: 24px;
   font-weight: 600;
@@ -805,7 +805,7 @@
   font-weight: 600;
 }
 
-/* IIC Guidelines */
+/* GRIET Guidelines */
 .guidelines-grid,
 .news-grid,
 .internships-grid {
